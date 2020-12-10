@@ -199,7 +199,7 @@ class BasicEntityPersister
 
         $relPattern = sprintf('%s-[%s:`%s`]-%s', $isIncoming, $relAlias, $relationshipType, $isOutgoing);
 
-        $cypher = 'MATCH (n) WHERE id(n) = {id} ';
+        $cypher = 'MATCH (n) WHERE id(n) = $id ';
         $cypher .= 'MATCH (n)'.$relPattern.'('.$targetAlias.($targetClassLabel != null ? ':' . $targetClassLabel : '').') ';
         $cypher .= 'RETURN '.$targetAlias;
 
@@ -224,7 +224,7 @@ class BasicEntityPersister
 
         $relPattern = sprintf('%s-[%s:`%s`]-%s', $isIncoming, $relAlias, $relationshipType, $isOutgoing);
 
-        $cypher = 'MATCH (n) WHERE id(n) = {id} ';
+        $cypher = 'MATCH (n) WHERE id(n) = $id ';
         $cypher .= 'MATCH (n)'.$relPattern.'('.$targetAlias.') ';
         $cypher .= 'RETURN {target: '.$target.'('.$relAlias.'), re: '.$relAlias.'} AS '.$relAlias;
 
@@ -248,7 +248,7 @@ class BasicEntityPersister
 
         $relPattern = sprintf('%s-[%s:`%s`]-%s', $isIncoming, $relAlias, $relationshipType, $isOutgoing);
 
-        $cypher = 'MATCH (n) WHERE id(n) = {id} ';
+        $cypher = 'MATCH (n) WHERE id(n) = $id ';
         $cypher .= 'MATCH (n)'.$relPattern.'('.$targetAlias.($targetClassLabel != null ? ':' . $targetClassLabel : '').') ';
         $cypher .= 'RETURN '.$targetAlias.' AS '.$targetAlias.' ';
 
@@ -265,7 +265,7 @@ class BasicEntityPersister
     {
         $identifier = $this->_classMetadata->getEntityAlias();
         $label = $this->_classMetadata->getLabel();
-        $cypher = 'MATCH ('.$identifier.':`'.$label.'`) WHERE id('.$identifier.') = {id} RETURN '.$identifier;
+        $cypher = 'MATCH ('.$identifier.':`'.$label.'`) WHERE id('.$identifier.') = $id RETURN '.$identifier;
         $params = ['id' => (int) $id];
 
         return Statement::create($cypher, $params);
@@ -290,7 +290,7 @@ class BasicEntityPersister
 
         $relPattern = sprintf('%s-[:`%s`]-%s', $isIncoming, $relationshipType, $isOutgoing);
 
-        $cypher  = 'MATCH (n) WHERE id(n) = {id} ';
+        $cypher  = 'MATCH (n) WHERE id(n) = $id ';
         $cypher .= 'RETURN size((n)'.$relPattern.'('.$targetClassLabel.')) ';
         $cypher .= 'AS '.$alias;
 
