@@ -41,7 +41,8 @@ class BasicEntityPersister
     public function load(array $criteria, array $orderBy = null)
     {
         $stmt = $this->getMatchCypher($criteria, $orderBy);
-        $result = $this->_em->getDatabaseDriver()->run($stmt->text(), $stmt->parameters());
+        $neo4j_v4fixed = preg_replace("/(\{)(\S*)}/", "\$$2", $stmt->text());
+        $result = $this->_em->getDatabaseDriver()->run($neo4j_v4fixed, $stmt->parameters());
 
         if ($result->size() > 1) {
             throw new \LogicException(sprintf('Expected only 1 record, got %d', $result->size()));
